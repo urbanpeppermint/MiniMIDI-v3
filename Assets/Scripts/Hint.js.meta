@@ -1,0 +1,55 @@
+- !<AssetImportMetadata/c1c7021c-aec1-4b48-a585-51bfa092d559>
+  ImportedAssetIds:
+    JavaScriptAsset: !<reference> 9baaddd7-401e-4af3-aabb-e1ed978fb735
+  ImporterName: JavaScriptAssetImporter
+  PrimaryAsset: !<reference> 9baaddd7-401e-4af3-aabb-e1ed978fb735
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    JavaScriptAsset: !<own> 2c724063-33ad-476c-bd62-862a069399ba
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<ScriptAssetData/2c724063-33ad-476c-bd62-862a069399ba>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: a90f9aef-443c-4da8-9131-15a702d5b800
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    displayDuration: false
+    hintBody: false
+    hintObject: false
+    maxScale: false
+    minScale: false
+    pulseSpeed: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - hintObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      hintBody: |-
+        Pinch a genre, then Confirm stems, then pad buttons to play.
+        Drag BPM (stem tempo) and Crossfade sliders.
+        Optional: Theremin / spectrum ring when enabled.
+      displayDuration: !<float> 5.000000
+      minScale: !<float> 1.000000
+      maxScale: 1.500000
+      pulseSpeed: !<float> 2.000000
+  ScriptTypes:
+    -
+      {}

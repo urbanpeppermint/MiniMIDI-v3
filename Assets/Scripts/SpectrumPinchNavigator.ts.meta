@@ -1,0 +1,101 @@
+- !<AssetImportMetadata/d1d4544f-929b-4116-946a-286a1002a0e9>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> ad2f9d85-8fc8-4834-a78e-fbe5f74495d6
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> ad2f9d85-8fc8-4834-a78e-fbe5f74495d6
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 5c3417ee-7e41-4331-bb41-2fcea1cd3efb
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/5c3417ee-7e41-4331-bb41-2fcea1cd3efb>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: ce8ed660-d90d-4a6b-860b-b89b1e3bb36d
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    affectLyriaPadPitch: false
+    angleOffsetRad: false
+    applyThrottleSec: false
+    barCount: false
+    barHighlightScale: false
+    barMarkersParent: false
+    debugLog: false
+    djMidiManager: false
+    dominantHandOnly: false
+    pinchStartMaxRadiusFromCenter: false
+    pinchStrengthThreshold: false
+    spectrumBarSemitonesCsv: false
+    spectrumFeatureToggle: false
+    spectrumInnerRadius: false
+    spectrumOuterRadius: false
+    spectrumRadialSemitoneRange: false
+    spectrumRoot: false
+    spectrumRootSemitoneOffset: false
+    spectrumSemitoneStepPerBar: false
+    spectrumVisualsRoot: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - djMidiManager: !<MappingBased.AssignableType> 00000000-0000-0000-0000-000000000000
+      affectLyriaPadPitch: false
+      spectrumFeatureToggle: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      spectrumRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      barMarkersParent: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      spectrumVisualsRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      barCount: !<float> 9.000000
+      pinchStartMaxRadiusFromCenter: !<float> 14.000000
+      spectrumInnerRadius: !<float> 10.000000
+      spectrumOuterRadius: !<float> 38.000000
+      angleOffsetRad: !<float> 0.000000
+      spectrumSemitoneStepPerBar: !<float> 1.000000
+      spectrumRootSemitoneOffset: !<float> 0.000000
+      spectrumBarSemitonesCsv: ""
+      spectrumRadialSemitoneRange: !<float> 4.000000
+      pinchStrengthThreshold: 0.550000
+      dominantHandOnly: true
+      barHighlightScale: 1.180000
+      applyThrottleSec: 0.085000
+      debugLog: false
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input AssignableType djMidiManager {"hint":"When affectLyriaPadPitch is ON: DJMidiManager used to retune the pad aligned with the bar index."}'
+    - '// @input bool affectLyriaPadPitch {"hint":"If ON, bar index maps to pad[i] and setSpectrumPitchSemitones applies. Default OFF — spectrum is overlay navigation only."}'
+    - '// @input Component.ScriptComponent spectrumFeatureToggle {"hint":"Optional: SIK ToggleButton — when ON, pinch navigation runs. Leave empty to always allow pinch (single mode)."}'
+    - '// @input SceneObject spectrumRoot {"hint":"World origin of the spectrum disc; local XZ plane is used for angle + radius."}'
+    - '// @input SceneObject barMarkersParent {"hint":"Optional: parent whose ordered children are bar meshes (0 = first bar). Highlight scales selected bar."}'
+    - '// @input SceneObject spectrumVisualsRoot {"hint":"Optional: hide this object (and children) when the feature toggle is OFF."}'
+    - '// @input float barCount = 9 {"hint":"Number of spectrum bars / note slots around the ring (visual count; independent of Lyria pad count unless affectLyriaPadPitch is ON)."}'
+    - '// @input float pinchStartMaxRadiusFromCenter = 14 {"hint":"Max distance from spectrum center (cm) for pinch midpoint to count as starting the gesture."}'
+    - '// @input float spectrumInnerRadius = 10 {"hint":"Inner radius of the spectrum ring (cm) — at this radius radial semitone offset is 0."}'
+    - '// @input float spectrumOuterRadius = 38 {"hint":"Outer radius of the spectrum ring (cm)."}'
+    - "// @input float angleOffsetRad {\"hint\":\"Radians added to atan2 before mapping angle → bar (rotate which note slot is at 12 o'clock).\"}"
+    - '// @input float spectrumSemitoneStepPerBar = 1 {"hint":"If bar semitones CSV is empty: semitone = barIndex × step + rootOffset."}'
+    - '// @input float spectrumRootSemitoneOffset {"hint":"Added to each bar’s discrete semitone when CSV is empty."}'
+    - '// @input string spectrumBarSemitonesCsv {"hint":"Optional: comma-separated semitones per bar, e.g. 0,2,4,5,7,9,11,12,14 — overrides step×index if enough values."}'
+    - '// @input float spectrumRadialSemitoneRange = 4 {"hint":"Semitones added from inner→outer radius (theremin sweep)."}'
+    - '// @input float pinchStrengthThreshold = 0.55 {"hint":"Min pinch strength (0–1) to read the gesture."}'
+    - '// @input bool dominantHandOnly = true {"hint":"Use dominant hand only; if false, either hand can drive (first valid pinch wins)."}'
+    - '// @input float barHighlightScale = 1.18 {"hint":"Scale multiplier for the highlighted bar mesh."}'
+    - '// @input float applyThrottleSec = 0.085 {"hint":"When affectLyriaPadPitch: seconds between resample applies. Also throttles debug prints."}'
+    - '// @input bool debugLog {"hint":"Print mapping / state changes."}'

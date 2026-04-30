@@ -1,0 +1,71 @@
+- !<AssetImportMetadata/81b22e06-a7c4-443b-adf9-41f2c93ad13b>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> a6825203-53e9-462c-bc22-9bc293d46ca8
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> a6825203-53e9-462c-bc22-9bc293d46ca8
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 286225e5-e154-4b49-93bc-d013f6ebbb7f
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/286225e5-e154-4b49-93bc-d013f6ebbb7f>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 360873c8-57e1-4914-beb7-732be322be13
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    emojiText: false
+    emptyMaterial: false
+    errorMaterial: false
+    genreId: false
+    labelText: false
+    loadingMaterial: false
+    padIndex: false
+    padMesh: false
+    playingMaterial: false
+    readyMaterial: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - padIndex: !<float> 0.000000
+      genreId: !<float> 1.000000
+      padMesh: !<reference.RenderMeshVisual> 00000000-0000-0000-0000-000000000000
+      emptyMaterial: !<reference.Material> 00000000-0000-0000-0000-000000000000
+      loadingMaterial: !<reference.Material> 00000000-0000-0000-0000-000000000000
+      readyMaterial: !<reference.Material> 00000000-0000-0000-0000-000000000000
+      playingMaterial: !<reference.Material> 00000000-0000-0000-0000-000000000000
+      errorMaterial: !<reference.Material> 00000000-0000-0000-0000-000000000000
+      labelText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      emojiText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input float padIndex {"hint":"Pad index (0-8)"}'
+    - '// @input float genreId = 1 {"hint":"Genre ID this pad belongs to (1-5)"}'
+    - '// @input Component.RenderMeshVisual padMesh {"hint":"Visual mesh for the pad"}'
+    - '// @input Asset.Material emptyMaterial {"hint":"Material for empty state"}'
+    - '// @input Asset.Material loadingMaterial {"hint":"Material for loading state"}'
+    - '// @input Asset.Material readyMaterial {"hint":"Material for ready state"}'
+    - '// @input Asset.Material playingMaterial {"hint":"Material for playing state"}'
+    - '// @input Asset.Material errorMaterial {"hint":"Material for error state"}'
+    - '// @input Component.Text labelText {"hint":"Optional label text"}'
+    - '// @input Component.Text emojiText {"hint":"Optional emoji text"}'

@@ -1,0 +1,86 @@
+- !<AssetImportMetadata/8f7e339f-736c-4a33-aab1-2145a2b0a995>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 6aa3fcf5-46db-4994-8ba5-549a1f85b1ff
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 6aa3fcf5-46db-4994-8ba5-549a1f85b1ff
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 1b8db49f-78ae-4c71-90f8-8b55cdca0ccf
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/1b8db49f-78ae-4c71-90f8-8b55cdca0ccf>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 0cd4e6ce-599a-47ac-9b43-b35e20ccf6e4
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    autoPlayFirstGeneratedTrack: false
+    bpmLabel: false
+    bpmTweakAtMax: false
+    bpmTweakAtMin: false
+    bpmTweakDebounceSec: false
+    bpmTweakSliderRoot: false
+    crossfaderController: false
+    delayBetweenTracks: false
+    genreLabel: false
+    midiPadGrid: false
+    playbackRateAtMax: false
+    playbackRateAtMin: false
+    playbackRateDebounceSec: false
+    playbackRateSliderRoot: false
+    statusText: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - midiPadGrid: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      statusText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      genreLabel: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      bpmLabel: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      bpmTweakSliderRoot: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      bpmTweakAtMin: !<float> -6.000000
+      bpmTweakAtMax: !<float> 6.000000
+      bpmTweakDebounceSec: 0.180000
+      playbackRateSliderRoot: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      playbackRateAtMin: 0.920000
+      playbackRateAtMax: 1.080000
+      playbackRateDebounceSec: 0.450000
+      crossfaderController: !<MappingBased.AssignableType> 00000000-0000-0000-0000-000000000000
+      delayBetweenTracks: !<float> 2000.000000
+      autoPlayFirstGeneratedTrack: true
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input SceneObject midiPadGrid {"hint":"Single SceneObject parent whose direct children are the 9 pads. Same grid is re-used for every genre; labels and Lyria clips update when you switch genre."}'
+    - // @input Component.Text statusText
+    - // @input Component.Text genreLabel
+    - // @input Component.Text bpmLabel
+    - '// @input Component.ScriptComponent bpmTweakSliderRoot {"hint":"Optional: SIK Slider — per-stem BPM (tap pad to choose). Offset/label update while dragging; heavy resample is debounced and runs immediately when you release the knob."}'
+    - '// @input float bpmTweakAtMin = -6 {"hint":"BPM at slider minimum (relative offset from genre BPM, e.g. -6)"}'
+    - '// @input float bpmTweakAtMax = 6 {"hint":"BPM at slider maximum (relative offset from genre BPM, e.g. +6)"}'
+    - '// @input float bpmTweakDebounceSec = 0.18 {"hint":"Debounce (seconds) while dragging BPM tweak slider — label updates immediately; heavy resample runs after you pause or on slide end."}'
+    - '// @input Component.ScriptComponent playbackRateSliderRoot {"hint":"Optional: parent for SIK Slider — linear tempo on already-generated clips (pitch follows). Center = 1.0×."}'
+    - '// @input float playbackRateAtMin = 0.92 {"hint":"Playback speed at slider minimum (e.g. 0.92 = slower)"}'
+    - '// @input float playbackRateAtMax = 1.08 {"hint":"Playback speed at slider maximum (e.g. 1.08 = faster)"}'
+    - '// @input float playbackRateDebounceSec = 0.45 {"hint":"Debounce (seconds) while dragging playback-rate slider (heavy resample per loaded pad)."}'
+    - '// @input AssignableType crossfaderController {"hint":"CrossfaderController for mixing"}'
+    - '// @input float delayBetweenTracks = 2500 {"hint":"Delay between generating each track (ms)"}'
+    - '// @input bool autoPlayFirstGeneratedTrack = true {"hint":"When true, automatically plays pad 0 after the first Lyria clip loads (preview)."}'

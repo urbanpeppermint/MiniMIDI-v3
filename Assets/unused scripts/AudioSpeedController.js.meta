@@ -1,0 +1,42 @@
+- !<AssetImportMetadata/adb7e553-956e-4b5c-9470-d8ae3863220e>
+  ImportedAssetIds:
+    JavaScriptAsset: !<reference> 2ed05aed-eb61-4b0d-b819-befc352a2c39
+  ImporterName: JavaScriptAssetImporter
+  PrimaryAsset: !<reference> 2ed05aed-eb61-4b0d-b819-befc352a2c39
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    JavaScriptAsset: !<own> 6e7bb46e-aff9-4a8c-a93a-e47addc1fdae
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<ScriptAssetData/6e7bb46e-aff9-4a8c-a93a-e47addc1fdae>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 7e83e14c-1968-465f-af90-908a3f45e290
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    bpmSliderScript: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - bpmSliderScript: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}

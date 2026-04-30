@@ -1,0 +1,103 @@
+- !<AssetImportMetadata/15666858-b899-496c-93c8-2c61f3eaccd0>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 3f2a4ca2-4afc-4a69-adfc-a6cd9bb9ec79
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 3f2a4ca2-4afc-4a69-adfc-a6cd9bb9ec79
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> acb9e5ba-0f4a-4d45-b16a-4dd7095ee3ac
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/acb9e5ba-0f4a-4d45-b16a-4dd7095ee3ac>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 893286a1-dd5c-4a8a-b5d2-912e11115a59
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    debugLogs: false
+    dimWhenNoHandTracked: false
+    layoutSpectrumRadialOnStart: false
+    sectorHighlightBoost: false
+    spectrumBarCount: false
+    spectrumBarVisuals: false
+    spectrumBars: false
+    spectrumBarsParent: false
+    spectrumBaseHeight: false
+    spectrumDecaySpeed: false
+    spectrumLayoutRotationOffsetDeg: false
+    spectrumPeakHeight: false
+    spectrumPinchNavigator: false
+    spectrumPlaceAtSectorCenters: false
+    spectrumRadialSliceOrientation: false
+    spectrumRingRadius: false
+    spectrumSlicesMeetAtCenter: false
+    spectrumThickness: false
+    thereminTrackHoldersParent: false
+    usePinchBarHighlight: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - spectrumBars: !<reference.SceneObject[]>
+        []
+      spectrumBarsParent: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      spectrumBarVisuals: !<reference.RenderMeshVisual[]>
+        []
+      spectrumBaseHeight: 0.600000
+      spectrumPeakHeight: 5.500000
+      spectrumThickness: 0.350000
+      spectrumDecaySpeed: 0.180000
+      layoutSpectrumRadialOnStart: true
+      spectrumRingRadius: !<float> 12.000000
+      spectrumSlicesMeetAtCenter: false
+      spectrumPlaceAtSectorCenters: false
+      spectrumRadialSliceOrientation: false
+      spectrumLayoutRotationOffsetDeg: !<float> 0.000000
+      thereminTrackHoldersParent: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      spectrumBarCount: 15
+      usePinchBarHighlight: true
+      sectorHighlightBoost: 1.500000
+      debugLogs: false
+      dimWhenNoHandTracked: false
+      spectrumPinchNavigator: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input SceneObject[] spectrumBars = {} {"hint":"Bar roots in ring order (spectrum note slots / SpecBars; count need not match Lyria pads)."}'
+    - '// @input SceneObject spectrumBarsParent {"hint":"When set and has children, their hierarchy order drives layout (recommended: SpectrumRing). Otherwise `spectrumBars` is used."}'
+    - '// @input Component.RenderMeshVisual[] spectrumBarVisuals = {} {"hint":"Optional RenderMeshVisual per bar (same order as spectrumBars)."}'
+    - // @input float spectrumBaseHeight = 0.6
+    - // @input float spectrumPeakHeight = 5.5
+    - // @input float spectrumThickness = 0.35
+    - // @input float spectrumDecaySpeed = 0.18
+    - // @input bool layoutSpectrumRadialOnStart = true
+    - // @input float spectrumRingRadius = 12
+    - '// @input bool spectrumSlicesMeetAtCenter {"hint":"If true, bars keep local position (0,0,0); each slice rotates so its outward bisector steps over 360° with tips meeting at the parent origin (pizza hub). Ring radius is ignored for placement."}'
+    - '// @input bool spectrumPlaceAtSectorCenters {"hint":"If true, each bar angle uses sector center (i+0.5)/count — matches SpectrumPinchNavigator’s floor(angle→bar) sectors."}'
+    - '// @input bool spectrumRadialSliceOrientation {"hint":"If true, bar rotation faces mesh +Z toward ring outward (typical pizza wedge). Ignored when spectrumSlicesMeetAtCenter is on (hub layout always uses that facing)."}'
+    - '// @input float spectrumLayoutRotationOffsetDeg {"hint":"Extra degrees around world Z after base bar rotation (tweak wedge mesh facing)."}'
+    - '// @input SceneObject thereminTrackHoldersParent {"hint":"Optional: parent whose direct children (bar order 0…) copy each spectrum bar’s world position/rotation — e.g. ThereminTrackHolders under ThereminVoiceBus."}'
+    - '// @input int spectrumBarCount = 15 {"hint":"Number of bars (match SpectrumPinchNavigator.barCount and scene SpecBar count)."}'
+    - '// @input bool usePinchBarHighlight = true {"hint":"Boost the bar index returned by SpectrumPinchNavigator while pinching."}'
+    - // @input float sectorHighlightBoost = 1.5
+    - // @input bool debugLogs
+    - '// @input bool dimWhenNoHandTracked {"hint":"Fade spectrum when neither hand is tracked (SIK)."}'
+    - '// @input Component.ScriptComponent spectrumPinchNavigator {"hint":"Drag the ScriptComponent that has SpectrumPinchNavigator (same object). Powers bar boost + must match bar order."}'

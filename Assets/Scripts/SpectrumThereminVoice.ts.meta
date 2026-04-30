@@ -1,0 +1,62 @@
+- !<AssetImportMetadata/a1b2c3d4-e5f6-4789-a012-3456789abced>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> b9c8d7e6-f504-4231-a0fe-abcdef012301
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> b9c8d7e6-f504-4231-a0fe-abcdef012301
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> c8d7e6f5-a403-3120-9fed-bcde01230192
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/c8d7e6f5-a403-3120-9fed-bcde01230192>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: e504231a-0fe4-4231-a0fe-abcdef012302
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    crossfadeSpeed: false
+    debugLog: false
+    masterTrim: false
+    spectrumPinchNavigator: false
+    stopThreshold: false
+    thereminTrackHoldersParent: false
+    trackDocumentation: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - spectrumPinchNavigator: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      thereminTrackHoldersParent: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      crossfadeSpeed: !<float> 8.000000
+      stopThreshold: 0.015000
+      masterTrim: 0.850000
+      debugLog: false
+      trackDocumentation: ""
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input Component.ScriptComponent spectrumPinchNavigator {"hint":"SpectrumPinchNavigator ScriptComponent (same object as on scene)."}'
+    - '// @input SceneObject thereminTrackHoldersParent {"hint":"Parent object whose **direct children** each have one AudioComponent, in bar order 0 → barCount−1."}'
+    - '// @input float crossfadeSpeed = 8 {"hint":"Approx. fade units per second between looped tracks (higher = faster)."}'
+    - '// @input float stopThreshold = 0.015 {"hint":"Fade-out voices stop when volume falls below this."}'
+    - '// @input float masterTrim = 0.85 {"hint":"Bus multiplier on top of pinch expression."}'
+    - '// @input bool debugLog {"hint":"Log track changes."}'
+    - '// @input string trackDocumentation {"hint":"Documentation only (not used at runtime). One line per bar index, e.g. `0 | C3 | MIDI 48 | theremin_C3`. Edit to match your Theremin_Track_00… order."}'

@@ -1,0 +1,71 @@
+- !<AssetImportMetadata/67486365-da7d-4b4d-b6af-438c561f69f9>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> b08d149b-0b6e-4283-bbaa-a75667438f5d
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> b08d149b-0b6e-4283-bbaa-a75667438f5d
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 8b511949-5d5b-43ee-89a8-6747169dbcd8
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/8b511949-5d5b-43ee-89a8-6747169dbcd8>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: ae524326-0cea-47f2-9041-1b0f57d007e0
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    animationSpeed: false
+    baseDotSize: false
+    dotContainer: false
+    dotPrefab: false
+    dotsPerTrack: false
+    floatAmplitude: false
+    maxDotSize: false
+    poolDepth: false
+    poolHeight: false
+    poolWidth: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - dotContainer: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      dotPrefab: !<reference.ObjectPrefab> 00000000-0000-0000-0000-000000000000
+      dotsPerTrack: !<float> 12.000000
+      poolWidth: !<float> 50.000000
+      poolHeight: !<float> 30.000000
+      poolDepth: !<float> 10.000000
+      baseDotSize: 1.500000
+      maxDotSize: !<float> 4.000000
+      animationSpeed: !<float> 1.000000
+      floatAmplitude: !<float> 3.000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input SceneObject dotContainer {"hint":"Container for all dots"}'
+    - '// @input Asset.ObjectPrefab dotPrefab {"hint":"Prefab for each dot (sphere mesh)"}'
+    - '// @input float dotsPerTrack = 12 {"hint":"Number of dots per track"}'
+    - '// @input float poolWidth = 50 {"hint":"Width of the dot pool area"}'
+    - '// @input float poolHeight = 30 {"hint":"Height of the dot pool area"}'
+    - '// @input float poolDepth = 10 {"hint":"Depth of the dot pool area"}'
+    - '// @input float baseDotSize = 1.5 {"hint":"Base size of dots when at low volume"}'
+    - '// @input float maxDotSize = 4 {"hint":"Maximum size of dots when at full volume"}'
+    - '// @input float animationSpeed = 1 {"hint":"Speed of floating animation"}'
+    - '// @input float floatAmplitude = 3 {"hint":"Amplitude of floating movement"}'

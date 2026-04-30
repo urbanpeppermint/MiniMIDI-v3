@@ -1,0 +1,47 @@
+- !<AssetImportMetadata/cc44dd55-ee66-77ff-0088-991122334455>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> c7d8e9f0-a1b2-4345-c678-90abcdef0123
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> c7d8e9f0-a1b2-4345-c678-90abcdef0123
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> d8e9f0a1-b2c3-4456-d789-0abcdef01234
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/d8e9f0a1-b2c3-4456-d789-0abcdef01234>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: e9f0a1b2-c3d4-4567-e890-abcdef012345
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    djMidiManager: false
+    spectrumPinchNavigator: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - djMidiManager: !<MappingBased.AssignableType> 00000000-0000-0000-0000-000000000000
+      spectrumPinchNavigator: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input AssignableType djMidiManager {"hint":"Main DJ controller (pads, genres, BPM)."}'
+    - '// @input Component.ScriptComponent spectrumPinchNavigator {"hint":"Optional: SpectrumPinchNavigator ScriptComponent — while pinching the spectrum, ring hue uses overlay MIDI from bar + radial semitones."}'

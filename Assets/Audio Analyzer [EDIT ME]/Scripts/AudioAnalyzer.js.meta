@@ -1,0 +1,68 @@
+- !<AssetImportMetadata/68dd7e5d-278d-4415-975c-abea27092a77>
+  ImportedAssetIds:
+    JavaScriptAsset: !<reference> 0e73e324-7d16-4d79-9690-dc917d3132c1
+  ImporterName: JavaScriptAssetImporter
+  PrimaryAsset: !<reference> 0e73e324-7d16-4d79-9690-dc917d3132c1
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    JavaScriptAsset: !<own> a4bcf6ad-d9f8-4b29-b11b-0b70b45923e1
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<ScriptAssetData/a4bcf6ad-d9f8-4b29-b11b-0b70b45923e1>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: d17bfa51-b8aa-4b80-a2a2-0a678b1c578a
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    audioComponent: false
+    audioInputScript: false
+    audioTrack: false
+    fftSize: false
+    frameSize: false
+    hopSize: false
+    inputType: false
+    loops: false
+    maxFreq: false
+    microphoneAudio: false
+    minFreq: false
+    numMel: false
+    playAudio: false
+    sampleRate: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - inputType: 1
+      audioTrack: !<reference.AudioTrackAsset> 00000000-0000-0000-0000-000000000000
+      playAudio: false
+      loops: -1
+      microphoneAudio: !<reference.AudioTrackAsset> 00000000-0000-0000-0000-000000000000
+      audioComponent: !<reference.AudioComponent> 00000000-0000-0000-0000-000000000000
+      audioInputScript: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      sampleRate: 44100
+      frameSize: 512
+      hopSize: 128
+      fftSize: 2048
+      numMel: 8
+      minFreq: !<float> 0.000000
+      maxFreq: !<float> 12000.000000
+  ScriptTypes:
+    -
+      {}

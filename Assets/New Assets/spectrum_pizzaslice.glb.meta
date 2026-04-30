@@ -1,0 +1,141 @@
+- !<AssetImportMetadata/3c8f2626-3cf8-432c-8d6f-59fce5f50d9c>
+  ImportedAssetIds:
+    09c1609493715f83: !<reference> 5e317ca0-3ce9-4a91-8879-70c6b0445b28
+    4239e5f46e05b179: !<reference> de6d67d9-be58-45bd-b3b9-655ff4e63190
+    4832e4ed5749227e: !<reference> 5df2b775-ef96-4fbd-8361-b30527c26c13
+    4a3e924fad0e2f27: !<reference> dac57f5d-fa66-48c4-90e9-8053c29bdc22
+    66780cf3a4dcb2b8: !<reference> d19518a6-f717-4bc0-bf56-cc141c041c7a
+    Meshes/Spectrum_Wedge_Bar_LocalY_Growth_PivotAtApex: !<reference> 09c10275-9b6d-467d-9437-6ea53b963864
+    Scene: !<reference> 732829a3-ef75-4dec-89c6-7c561d075cd9
+    c1ebeddeea3723ba: !<reference> 51fadccd-802a-4388-aa14-54b2a854d1fb
+  ImporterName: GltfImporter
+  PrimaryAsset: !<reference> 732829a3-ef75-4dec-89c6-7c561d075cd9
+  PackageType: LegacyPackage
+  LegacyPackagePolicy: CanBeUnpackedTransparent
+  ExtraData:
+    {}
+  AssetDataMap:
+    Scene: !<own> e1527c89-a028-4200-b013-378fc6817f1a
+  DependentFiles:
+    []
+  ImporterSettings: !<GltfImporterSettings>
+    UseLegacyImporter: false
+    WithMaterials: true
+    NamingConvention: ByCategorySanitizeV2
+    PersistentIdGenerationAlgorithm: DescriptorBased
+    AnimationCurveOptimization: true
+    CustomAnimationSamplingRate: 30.000000
+    ImportVertexColor: true
+    ImportTangents: true
+    ImportMorphTargetAnimation: true
+    ConvertMetersToCentimeters: true
+    RegenerateTangents: false
+  CompressionSettings: !<ComplexCompressionSettings>
+    Presets:
+      None Compression: !<SingleCompressionSettings>
+        CompressorName: None
+        CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+    ExtensionMappings:
+      mesh: None Compression
+    Overrides:
+      {}
+- !<SceneObject/51fadccd-802a-4388-55eb-ab4d57ab2e04>
+  PrefabRemaps:
+    []
+  Name: Spectrum_Wedge_Bar_LocalY_Growth_PivotAtApex
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> de6d67d9-be58-45bd-4c46-9aa00b19ce6f
+- !<SceneObject/5df2b775-ef96-4fbd-7c9e-4cfad83d93ec>
+  PrefabRemaps:
+    []
+  Name: world
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> 51fadccd-802a-4388-55eb-ab4d57ab2e04
+  Components:
+    []
+- !<SceneObject/5e317ca0-3ce9-4a91-7786-8f394fbba4d7>
+  PrefabRemaps:
+    []
+  Name: Scene0
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> 5df2b775-ef96-4fbd-7c9e-4cfad83d93ec
+  Components:
+    []
+- !<SceneObject/d19518a6-f717-4bc0-40a9-33ebe3fbe385>
+  PrefabRemaps:
+    []
+  Name: spectrum_pizzaslice
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 100.000000, y: 100.000000, z: 100.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> dac57f5d-fa66-48c4-6f16-7fac3d6423dd
+  Components:
+    []
+- !<SceneObject/dac57f5d-fa66-48c4-6f16-7fac3d6423dd>
+  PrefabRemaps:
+    []
+  Name: Scenes
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> 5e317ca0-3ce9-4a91-7786-8f394fbba4d7
+  Components:
+    []
+- !<RenderMeshVisual/de6d67d9-be58-45bd-4c46-9aa00b19ce6f>
+  PrefabRemaps:
+    []
+  Name: Spectrum_Wedge_Bar_LocalY_Growth_PivotAtApex
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    []
+  Mesh: !<reference> 09c10275-9b6d-467d-9437-6ea53b963864
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}
+- !<ObjectPrefabAssetData/e1527c89-a028-4200-b013-378fc6817f1a>
+  Prototype: !<ObjectOwner/605b28a3-311e-41f9-bd77-4d70bf6cb034>
+    PackagePath: ""
+    objects:
+      - !<own> d19518a6-f717-4bc0-40a9-33ebe3fbe385

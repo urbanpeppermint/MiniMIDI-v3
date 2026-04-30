@@ -1,0 +1,50 @@
+- !<AssetImportMetadata/9f6946d9-5e6f-4acc-90bc-ddb12d8e6ced>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> af03c24e-99ce-4bfc-8697-aab43d2870ed
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> af03c24e-99ce-4bfc-8697-aab43d2870ed
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> a7f02574-da92-43a6-b24f-31e2b9b4d047
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/a7f02574-da92-43a6-b24f-31e2b9b4d047>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 072fe0dc-5846-4a28-95d0-e1c25196c206
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    crossfaderSlider: false
+    trackALabel: false
+    trackBLabel: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - crossfaderSlider: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      trackALabel: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      trackBLabel: !<reference.Text> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input Component.ScriptComponent crossfaderSlider {"hint":"SceneObject that has the SIK Slider (parent e.g. ContainerFrame is OK — children are searched)"}'
+    - '// @input Component.Text trackALabel {"hint":"Track A label (older deck; quieter as fader moves toward B)"}'
+    - '// @input Component.Text trackBLabel {"hint":"Track B label (newer deck; louder as fader moves toward B / higher slider value)"}'

@@ -1,0 +1,50 @@
+- !<AssetImportMetadata/38411d33-4068-475e-a56c-2e198a80ecf0>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 8aceb15c-3086-4076-a4e8-0069c4ac4384
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 8aceb15c-3086-4076-a4e8-0069c4ac4384
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> f8580405-daf4-4153-9b53-90c0d786c0fc
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/f8580405-daf4-4153-9b53-90c0d786c0fc>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 800c2a84-7c07-4fa2-a8cc-5c26b8a8d065
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    maxSpeed: false
+    minSpeed: false
+    sliderScript: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - sliderScript: !<reference.ScriptComponent> 00000000-0000-0000-0000-000000000000
+      minSpeed: 0.500000
+      maxSpeed: !<float> 2.000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - "// @input Component.ScriptComponent sliderScript {\"hint\":\"Drag the SIK Slider's ScriptComponent here\"}"
+    - '// @input float minSpeed = 0.5 {"hint":"Min speed (0.5 = half-speed)"}'
+    - '// @input float maxSpeed = 2 {"hint":"Max speed (2.0 = double-speed)"}'

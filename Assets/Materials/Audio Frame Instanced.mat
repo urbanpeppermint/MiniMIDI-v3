@@ -1,0 +1,121 @@
+- !<Material/157cedc0-e21e-49ec-bc41-d9b3c950a883>
+  PackagePath: ""
+  PassesInfo:
+    - !<own> ed9b46ba-5cec-4d2c-84f6-21bd1207727f
+- !<PassInfo/ed9b46ba-5cec-4d2c-84f6-21bd1207727f>
+  CachedProperties:
+    - Port_RangeMaxA_N007:
+        typeIdx: 1
+        value: 1.000000
+    - Port_RangeMaxA_N016:
+        typeIdx: 1
+        value: 1.000000
+    - Port_RangeMaxB_N007:
+        typeIdx: 1
+        value: 1.000000
+    - Port_RangeMaxB_N012:
+        typeIdx: 1
+        value: 1.000000
+    - Port_RangeMaxB_N016:
+        typeIdx: 1
+        value: 1.000000
+    - Port_RangeMinA_N007:
+        typeIdx: 1
+        value: 0.000000
+    - Port_RangeMinA_N012:
+        typeIdx: 1
+        value: 0.000000
+    - Port_RangeMinA_N016:
+        typeIdx: 1
+        value: 0.000000
+    - Port_RangeMinB_N007:
+        typeIdx: 1
+        value: -1.000000
+    - Port_RangeMinB_N012:
+        typeIdx: 1
+        value: 0.000000
+    - Port_RangeMinB_N016:
+        typeIdx: 1
+        value: -1.000000
+    - Port_Value2_N005:
+        typeIdx: 1
+        value: 0.000000
+    - Port_Value3_N008:
+        typeIdx: 1
+        value: 0.000000
+    - PreviewEnabled:
+        typeIdx: 0
+        value: 0
+    - audioTex:
+        typeIdx: 9
+        value:
+          id: 83d463d7-e7a2-45b8-90a5-467c4b747f8d
+          sampler:
+            filteringMode: Trilinear
+            wrapModeU: Repeat
+            wrapModeV: Repeat
+            wrapModeW: Repeat
+            borderColor: {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+            mipmaps: false
+          type: Texture2D
+    - audioTexBorderColor:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    - audioTexDims:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    - audioTexTransform:
+        typeIdx: 7
+        value:
+          0: {x: 1.000000, y: 0.000000, z: 0.000000}
+          1: {x: 0.000000, y: 1.000000, z: 0.000000}
+          2: {x: 0.000000, y: 0.000000, z: 1.000000}
+    - audioTexUvMinMax:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    - gradientTex:
+        typeIdx: 9
+        value:
+          id: 24808e71-1d06-4c43-bb89-99ea3cf57a93
+          sampler:
+            filteringMode: Trilinear
+            wrapModeU: Repeat
+            wrapModeV: Repeat
+            wrapModeW: Repeat
+            borderColor: {x: 0.000000, y: 0.000000, z: 0.000000, w: 0.000000}
+            mipmaps: false
+          type: Texture2D
+    - gradientTexBorderColor:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    - gradientTexDims:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    - gradientTexTransform:
+        typeIdx: 7
+        value:
+          0: {x: 1.000000, y: 0.000000, z: 0.000000}
+          1: {x: 0.000000, y: 1.000000, z: 0.000000}
+          2: {x: 0.000000, y: 0.000000, z: 1.000000}
+    - gradientTexUvMinMax:
+        typeIdx: 5
+        value: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+    - sizeMultiplier:
+        typeIdx: 1
+        value: 3.000000
+  DepthWrite: true
+  DepthTest: true
+  DepthFunction: LessEqual
+  TwoSided: false
+  ColorMask: {x: true, y: true, z: true, w: true}
+  CullMode: Back
+  PolygonOffset: {x: 0.000000, y: 0.000000}
+  FrustumCulling: Auto
+  FrustumCullPad: 0.000000
+  InstanceCount: 256
+  Defines:
+    - NODE_27_DROPLIST_ITEM 3
+  BlendMode: Disabled
+  Properties:
+    {}
+  Pass: !<reference> 562fa5c5-3b8f-4b58-bfb7-944c893933a1

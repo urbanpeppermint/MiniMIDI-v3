@@ -1,0 +1,56 @@
+- !<AssetImportMetadata/4a97716e-d963-42e2-acfc-119d76f50930>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> e1ec08db-55db-4bbc-80e2-f62e951c330c
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> e1ec08db-55db-4bbc-80e2-f62e951c330c
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 70d61d81-7312-463a-a322-ea3941d8b131
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/70d61d81-7312-463a-a322-ea3941d8b131>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 5b202f32-2f3f-43bf-bef1-8263a03ff429
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    debugText: false
+    lockIndicator: false
+    lockToggleButton: false
+    targetObject: false
+    unlockIndicator: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - lockToggleButton: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      targetObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      lockIndicator: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      unlockIndicator: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      debugText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - // @input SceneObject lockToggleButton
+    - // @input SceneObject targetObject
+    - // @input SceneObject lockIndicator
+    - // @input SceneObject unlockIndicator
+    - // @input Component.Text debugText

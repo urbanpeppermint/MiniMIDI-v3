@@ -1,0 +1,125 @@
+- !<AssetImportMetadata/41f8bbf1-d4a5-419d-b637-25914bdca1ce>
+  ImportedAssetIds:
+    09c1609493715f83: !<reference> ad2094e0-6d4f-45dc-b93f-025e67a17e96
+    4a3e924fad0e2f27: !<reference> aab320ff-33a8-46c8-bc81-f04e18f8fd50
+    66780cf3a4dcb2b8: !<reference> 4c48d22a-0c78-414d-9e7a-5e0a2abc43de
+    Meshes/SpectrumRing: !<reference> 146cc17d-4005-48f3-89e7-519f1a81bc2d
+    Scene: !<reference> af5c46ae-af75-4278-bbe7-4e484e50b2fc
+    c1e1d4afca82b708: !<reference> c9ea734f-0c0a-4dfc-b9d9-c6f9f66462f2
+    fa8a9c64e112b79e: !<reference> 3f970168-87ba-4a7a-a748-2d73644bf87d
+  ImporterName: GltfImporter
+  PrimaryAsset: !<reference> af5c46ae-af75-4278-bbe7-4e484e50b2fc
+  PackageType: LegacyPackage
+  LegacyPackagePolicy: CanBeUnpackedTransparent
+  ExtraData:
+    {}
+  AssetDataMap:
+    Scene: !<own> 86b3ce2b-c2ef-4454-b0a2-e4a062a42c12
+  DependentFiles:
+    []
+  ImporterSettings: !<GltfImporterSettings>
+    UseLegacyImporter: false
+    WithMaterials: true
+    NamingConvention: ByCategorySanitizeV2
+    PersistentIdGenerationAlgorithm: DescriptorBased
+    AnimationCurveOptimization: true
+    CustomAnimationSamplingRate: 30.000000
+    ImportVertexColor: true
+    ImportTangents: true
+    ImportMorphTargetAnimation: true
+    ConvertMetersToCentimeters: true
+    RegenerateTangents: false
+  CompressionSettings: !<ComplexCompressionSettings>
+    Presets:
+      None Compression: !<SingleCompressionSettings>
+        CompressorName: None
+        CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+    ExtensionMappings:
+      mesh: None Compression
+    Overrides:
+      {}
+- !<SceneObject/3f970168-87ba-4a7a-58b7-d28c9bb40782>
+  PrefabRemaps:
+    []
+  Name: SpectrumRing
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    []
+  Components:
+    - !<own> c9ea734f-0c0a-4dfc-4626-3906099b9d0d
+- !<SceneObject/4c48d22a-0c78-414d-6185-a1f5d543bc21>
+  PrefabRemaps:
+    []
+  Name: spectrum_ring
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 100.000000, y: 100.000000, z: 100.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> aab320ff-33a8-46c8-437e-0fb1e70702af
+  Components:
+    []
+- !<ObjectPrefabAssetData/86b3ce2b-c2ef-4454-b0a2-e4a062a42c12>
+  Prototype: !<ObjectOwner/0463de40-cab7-42e8-93b2-f64bd3cf9e57>
+    PackagePath: ""
+    objects:
+      - !<own> 4c48d22a-0c78-414d-6185-a1f5d543bc21
+- !<SceneObject/aab320ff-33a8-46c8-437e-0fb1e70702af>
+  PrefabRemaps:
+    []
+  Name: Scenes
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> ad2094e0-6d4f-45dc-46c0-fda1985e8169
+  Components:
+    []
+- !<SceneObject/ad2094e0-6d4f-45dc-46c0-fda1985e8169>
+  PrefabRemaps:
+    []
+  Name: Scene0
+  Enabled: true
+  Layers: 1
+  LocalTransform: !<TransformEntity>
+    Position: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Rotation: {x: 0.000000, y: 0.000000, z: 0.000000}
+    Scale: {x: 1.000000, y: 1.000000, z: 1.000000}
+    HasSegmentScaleCompensation: false
+  Children:
+    - !<own> 3f970168-87ba-4a7a-58b7-d28c9bb40782
+  Components:
+    []
+- !<RenderMeshVisual/c9ea734f-0c0a-4dfc-4626-3906099b9d0d>
+  PrefabRemaps:
+    []
+  Name: SpectrumRing
+  Enabled: true
+  RenderOrder: 0
+  StretchMode: Stretch
+  VerticalAlignment: Center
+  HorizontalAlignment: Center
+  MeshShadowMode: None
+  ShadowColor: {x: 1.000000, y: 1.000000, z: 1.000000, w: 1.000000}
+  ShadowDensity: 1.000000
+  Materials:
+    []
+  Mesh: !<reference> 146cc17d-4005-48f3-89e7-519f1a81bc2d
+  Skin: !<reference> 00000000-0000-0000-0000-000000000000
+  BlendShapesEnabled: true
+  BlendNormals: false
+  BlendShapes:
+    {}

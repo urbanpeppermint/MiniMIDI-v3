@@ -1,0 +1,53 @@
+- !<AssetImportMetadata/f4ab5fa3-e0e4-46fc-9c97-979138127cfa>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> c89bdb07-50c2-499c-aa0e-754ed15edd31
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> c89bdb07-50c2-499c-aa0e-754ed15edd31
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> 39d82b3e-f71c-4516-8f43-8f33a6c6ec75
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/39d82b3e-f71c-4516-8f43-8f33a6c6ec75>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: da4e1a66-5c73-4ce2-85bd-5a349efe4513
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    maxValueSceneObject: false
+    minValueSceneObject: false
+    slider: false
+    startDisabled: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - slider: !<MappingBased.AssignableType> 00000000-0000-0000-0000-000000000000
+      minValueSceneObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      maxValueSceneObject: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      startDisabled: true
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input AssignableType slider {"hint":"The Slider component to listen to"}'
+    - '// @input SceneObject minValueSceneObject {"hint":"Scene object to enable when slider reaches minimum value"}'
+    - '// @input SceneObject maxValueSceneObject {"hint":"Scene object to enable when slider reaches maximum value"}'
+    - '// @input bool startDisabled = true {"hint":"Should the scene objects start disabled?"}'

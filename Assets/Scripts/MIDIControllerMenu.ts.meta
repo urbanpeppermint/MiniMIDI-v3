@@ -1,0 +1,102 @@
+- !<AssetImportMetadata/9bb41093-9341-4f8f-91d9-3d2066e67c79>
+  ImportedAssetIds:
+    TypeScriptAsset: !<reference> 5041e596-7d36-4def-95cb-5d53a6f72515
+  ImporterName: TypeScriptAssetImporter
+  PrimaryAsset: !<reference> 5041e596-7d36-4def-95cb-5d53a6f72515
+  PackageType: NotAPackage
+  LegacyPackagePolicy: ~
+  ExtraData:
+    {}
+  AssetDataMap:
+    TypeScriptAsset: !<own> aa2cdf02-537c-4db8-9f9a-95d63b225959
+  DependentFiles:
+    []
+  ImporterSettings: !<AssetImporterSettings>
+    {}
+  CompressionSettings: !<own> 00000000-0000-0000-0000-000000000000
+- !<TypeScriptAssetData/aa2cdf02-537c-4db8-9f9a-95d63b225959>
+  SvgIcon: ""
+  SetupScript:
+    code: ""
+  Description: ""
+  VersionMajor: 0
+  VersionMinor: 0
+  VersionPatch: 0
+  ComponentUid: 68a4b05e-b0d0-49f5-827c-3e3e6794b55e
+  ExportUid: 00000000-0000-0000-0000-000000000000
+  PackagePolicy: CanBeUnpacked
+  ScriptInputsHidden:
+    debugText: false
+    djMidiManager: false
+    menuContainer: false
+    menuToggleButton: false
+    midiPadGrid: false
+    mode1Button: false
+    mode1Label: false
+    mode2Button: false
+    mode2Label: false
+    mode3Button: false
+    mode3Label: false
+    mode4Button: false
+    mode4Label: false
+    mode5Button: false
+    mode5Label: false
+    stemBackButton: false
+    stemConfirmButton: false
+    stemRoundRoot: false
+    stemToggleButtons: false
+    stemToggleButtonsParent: false
+  ScriptTypesHidden:
+    {}
+  ReadMe: !<reference> 00000000-0000-0000-0000-000000000000
+  DeclarationFile: !<reference> 00000000-0000-0000-0000-000000000000
+  Tags:
+    []
+  Attachments:
+    []
+  DefaultScriptInputs:
+    - mode1Button: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      mode2Button: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      mode3Button: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      mode4Button: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      mode5Button: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      mode1Label: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      mode2Label: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      mode3Label: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      mode4Label: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      mode5Label: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      midiPadGrid: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      stemRoundRoot: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      stemToggleButtonsParent: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      stemToggleButtons: !<reference.SceneObject[]>
+        []
+      stemConfirmButton: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      stemBackButton: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      menuToggleButton: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      menuContainer: !<reference.SceneObject> 00000000-0000-0000-0000-000000000000
+      debugText: !<reference.Text> 00000000-0000-0000-0000-000000000000
+      djMidiManager: !<MappingBased.AssignableType> 00000000-0000-0000-0000-000000000000
+  ScriptTypes:
+    -
+      {}
+  InputLines:
+    - '// @input SceneObject mode1Button {"hint":"Genre 1 button (Electronic)"}'
+    - '// @input SceneObject mode2Button {"hint":"Genre 2 button (Hip Hop)"}'
+    - '// @input SceneObject mode3Button {"hint":"Genre 3 button (Lofi Jazz)"}'
+    - '// @input SceneObject mode4Button {"hint":"Genre 4 button (House)"}'
+    - '// @input SceneObject mode5Button {"hint":"Genre 5 button (Rock)"}'
+    - '// @input Component.Text mode1Label {"hint":"Text label for Genre 1 button"}'
+    - '// @input Component.Text mode2Label {"hint":"Text label for Genre 2 button"}'
+    - '// @input Component.Text mode3Label {"hint":"Text label for Genre 3 button"}'
+    - '// @input Component.Text mode4Label {"hint":"Text label for Genre 4 button"}'
+    - '// @input Component.Text mode5Label {"hint":"Text label for Genre 5 button"}'
+    - '// @input SceneObject midiPadGrid {"hint":"Parent object whose children are the 9 pads (same reference as DJMidiManager.midiPadGrid)"}'
+    - '// @input SceneObject stemRoundRoot {"hint":"Root object for stem toggles + Confirm + Back (e.g. LyriaStemPickPanel). Hidden until a genre needs stem selection."}'
+    - '// @input SceneObject stemToggleButtonsParent {"hint":"Parent whose first 9 children are stem toggle buttons (same order as pads). Ignored if stemToggleButtons has 9 entries."}'
+    - '// @input SceneObject[] stemToggleButtons = {} {"hint":"Optional: exactly 9 toggle SceneObjects (pad order 0–8). Overrides parent children when length ≥ 9."}'
+    - '// @input SceneObject stemConfirmButton {"hint":"Confirm — calls Lyria for selected stems only."}'
+    - '// @input SceneObject stemBackButton {"hint":"Back — return to genre buttons without generating."}'
+    - // @input SceneObject menuToggleButton
+    - // @input SceneObject menuContainer
+    - '// @input Component.Text debugText {"hint":"Status/debug text"}'
+    - '// @input AssignableType djMidiManager {"hint":"DJMidiManager for Lyria generation"}'
