@@ -1,123 +1,292 @@
-# MiNiMIDI — Spectacles DJ Lens
+# 🎛️ MiNiMIDI v3
 
-**MiNiMIDI** is a **Snap Spectacles** experience built in **Lens Studio**: a compact **nine-pad MIDI deck** with **Lyria**-driven stems, **genre** kits, **BPM** control, **crossfader** mixing, a **spectrum ring** for pinch navigation and **theremin**-style voices, and an **equalizer** mesh whose look reacts to real pad playback.
+> **Crash-safe AI DJ for Snap Spectacles** — Generate stems with Google Lyria, crossfade live in AR, mix with your hands. *Lyria is a trademark of Google LLC.*
 
-This README summarizes what the project is, what we shipped in the current iteration, what we are proud of, where the rough edges are, and who contributed 3D design.
+[![Lens Studio](https://img.shields.io/badge/Lens%20Studio-5.x-FFFC00?style=for-the-badge&logo=snapchat&logoColor=black)](https://lensstudio.snapchat.com/)
+[![Spectacles](https://img.shields.io/badge/Spectacles-2024-00D4AA?style=for-the-badge)](https://www.spectacles.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
----
-
-## What You Get
-
-| Area | Behavior |
-|------|------------|
-| **Genres** | Five modes (e.g. Electronic, Hip Hop, Lofi Jazz, House, Rock) via `MidiControllerMenu` + `GenreInstrumentData`. |
-| **Pads** | One **shared 9-pad grid** (`DJMidiManager` + `MidiPadController`) reconfigured per genre — not nine separate scenes per style. |
-| **Lyria** | Stems are chosen in a **second “round”** in the menu: toggles + **Confirm** (generate) or **Back** (return to genres) — **no** Lyria job until **Confirm** (`MidiControllerMenu`). |
-| **BPM** | Optional **SIK slider** tweaks **per-stem** tempo relative to the genre BPM: label updates while dragging; **heavy resample is debounced** and flushes **on release** (`DJMidiManager`). |
-| **Crossfader** | **Two-deck** model (A = older, B = newer): slider toward B favors the newer playing pad. **Drag** uses debounced layer volumes; **slide end** and pad events **apply immediately** (`CrossfaderController` + `AudioLayerManager`). |
-| **Spectrum ring** | `SpectrumRingReaction` drives bar motion, hue, and pinch highlight; layout supports **pizza-from-center** slices, optional **Theremin holder** pose sync, and robust bar discovery via **`spectrumBarsParent`** (`SpectrumRing`). |
-| **Pinch overlay** | `SpectrumPinchNavigator` maps pinch position to **bar / semitone overlay** (optional Lyria pad pitch coupling is **off** by default). |
-| **Theremin** | `SpectrumThereminVoice` crossfades **looped** `AudioComponent` tracks per spectrum sector while navigating. |
-| **Spectrum ↔ visuals** | `MiniMidiAudioSpectacleAdapter` registers `SpectrumAudioPort` in `ServiceLocator` so the ring can follow **overlay MIDI** while pinching, otherwise **pad / BPM**-derived hue. |
-| **Equalizer** | `EqualizerVisualDriver` clones materials, drives **`padPlaybackGate`** when pads play, and can **swap** between a **static** and an **animated** shader material while audio is live. |
-| **Hints** | `Hint.js` shows a short onboarding string (BPM, crossfade, optional theremin) on a `Text` component. |
+<p align="center">
+  <img src="Media/banner.png" alt="MiNiMIDI — Lyria-powered DJ MIDI for Spectacles" width="100%">
+</p>
 
 ---
 
-## Architecture (Scripts You Care About)
+## 🎬 Demo
 
-- **`DJMidiManager.ts`** — Lyria calls, pad grid, genre switches, BPM slider wiring, status line, coordination with `AudioLayerManager` and crossfader.
-- **`MidiControllerMenu.ts`** — Genre UI, **stem round** visibility, **Confirm / Back**, pad grid reference alignment with `DJMidiManager`.
-- **`MidiPadController.ts`** — Per-pad state machine (`PadState`), PCM, Lyria playback, visuals, `onPadToggled` hooks.
-- **`AudioLayerManager.ts`** — Layer pool, **debounced** `setLayerVolume` vs **`applyLayerVolumeNow`** for responsive faders.
-- **`CrossfaderController.ts`** — Deck A/B registration from playing pads, SIK slider, solo vs dual-deck gain law.
-- **`CrossfaderController` / BPM** — Stability comes from **not** hammering the audio thread: debounce while dragging, **commit** on gesture end.
-- **`SpectrumPinchNavigator.ts`** — Hand pinch → sector index, optional highlight scales, overlay MIDI for visuals.
-- **`SpectrumRingReaction.ts`** — Radial / hub layout, material clones, pinch sector boost, optional **`thereminTrackHoldersParent`** world-pose sync.
-- **`SpectrumThereminVoice.ts`** — Theremin bus: which loop fades in when the spectrum gesture is active.
-- **`MiniMidiAudioSpectacleAdapter.ts`** — `SpectrumAudioPort` implementation for the ring + expression.
-- **`EqualizerVisualDriver.ts`** — Gate + optional **idle vs animated** material swap when pads play with ready audio.
-- **`MIDIPositionLock.ts`** — Optional spatial lock UX for the deck (SIK).
-- **`GenreInstrumentData.ts`**, **`PcmResampler.ts`**, **`TrackColorManager.ts`**, **`DotPoolVisualizer.ts`**, **`vfx.ts`** — Supporting data, audio DSP, and polish.
+<p align="center">
+  <img src="Media/spectacles-ar-demo.png" alt="MiNiMIDI v3 in AR on Spectacles — deck, spectrum, crossfader" width="720">
+  <br><br>
+  <a href="YOUR_DEMO_LINK_HERE">
+    <img src="https://img.shields.io/badge/▶_Watch_Full_Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch Demo">
+  </a>
+</p>
+
+*Replace `YOUR_DEMO_LINK_HERE` with your YouTube or hosted reel when ready.*
 
 ---
 
-## BPM Solution (Why It Feels Stable)
+## ✨ What is MiNiMIDI v3?
 
-- BPM is presented as a **bounded offset** from the genre default (`bpmTweakAtMin` / `bpmTweakAtMax`).
-- While the **SIK slider** moves, the UI can update quickly, but **stem time-stretch / resample** work is **debounced** (`bpmTweakDebounceSec`) so scrubbing does not queue overlapping heavy work.
-- On **slide end**, pending work is flushed so the **heard** tempo matches the knob **immediately**.
-- The **last started pad** selects which stem receives BPM edits (`_bpmEditPadIndex`), keeping multi-stem sessions intentional rather than random.
+MiNiMIDI v3 is an **AI music studio for Snap Spectacles** that lets you generate, layer, and crossfade live stems in augmented reality — all with your hands.
 
----
+Tap a pad. Google Lyria generates a fresh loop. Grab the fader. Mix two decks together in real time. No crashes. No gaps. No pre-recorded samples.
 
-## Crossfader & Fader Stability
+```
+Tap pad  →  Lyria generates stem  →  Crossfade live  →  Mix in AR
+```
 
-- **During drag:** `setLayerVolume` → **debounced** application in `AudioLayerManager` (smoother, fewer glitches under load).
-- **On slide end / deck changes:** `applyLayerVolumeNow` so the mix **snaps** correctly when you let go or when a new pad promotes to deck B.
-- **CrossfaderController** ignores programmatic slider writes (`_ignoreSliderValueUpdates`) when syncing the SIK control to deck changes so you do not get feedback loops or double updates.
+v3 solves a hard Spectacles problem: **live crossfading multi‑MB PCM audio without overrunning script time or memory** — using native engine gain where possible and a serialized audio pump so two decks never blast the device in a single frame.
 
 ---
 
-## Spectrum & Theremin
+## 🆕 What's New in v3
 
-- **Pinch** is treated as an **overlay**: bar index and radial semitone offset can drive **ring color / highlight** via `SpectrumPinchNavigator` + `MiniMidiAudioSpectacleAdapter`, **without** implying that the nine Lyria pads are the same thing unless you explicitly wire pitch coupling.
-- **`SpectrumRingReaction`** lays out bars (including **pizza-hub** mode: slices meet at the ring center with **Z-axis** fanning), optionally syncs **theremin track holder** transforms to bar **world** poses, and warms layout over the first frames so Lens reference timing does not leave everything at identity rotation.
-- **`SpectrumThereminVoice`** listens for active spectrum navigation and **crossfades** between pre-authored **looped** theremin clips per bar index.
+### 🔥 Crash-Safe Crossfader — built for Spectacles AI music
 
----
+Large AI-generated stems (multi‑MB PCM, long loops) made the DJ crossfader unsafe on Spectacles. Every mix change was re-encoding the full buffer in TypeScript and re-pumping `DynamicAudioOutput` — sometimes twice in one frame (Deck A + Deck B). That blew memory, overran script time, and crashed as soon as the fader moved.
 
-## Menu Flow & Project Stability
-
-- **Genre first → stem toggles → Confirm or Back** reduces accidental Lyria spend and keeps mental model linear (`MidiControllerMenu`).
-- **Single pad grid** + explicit **genre apply** paths avoid duplicating nine pads per genre in the scene hierarchy.
-- **Service locator** pattern for spectrum audio (`ServiceLocator` + `SpectrumAudioPort`) keeps the ring decoupled from Lyria internals while still reflecting performance state.
+**v3 fixes this end-to-end.** Here's how:
 
 ---
 
-## MIDI Deck & Equalizer (Look & Shader)
+#### 1 · Native Per-Layer Gain
 
-- The **deck** is built as a **Spectacles-native** layout: SIK **sliders**, **interactables**, and spatial hierarchy suitable for **hand** and **device** framing — a **futuristic** read: bold grouping of **genre**, **stems**, **pads**, **BPM**, **crossfader**, and **spectrum / theremin** as one instrument.
-- The **equalizer** uses a **dedicated driver** (`EqualizerVisualDriver`):
-  - Clones materials so runtime writes hit the **instance** the mesh uses.
-  - Supports **`padPlaybackGate`** (and common alias names) for shader graphs that animate on “music is actually playing”.
-  - Supports a **second material** (`equalizerMaterialAnimated`) so you can keep a **clean static** look at idle and **swap to the full animated graph** only when a pad is **playing** with **ready** PCM (`hasAudio`, not loading/error).
+```
+Before:  fader move → multiply entire PCM buffer in JS → pump DynamicAudioOutput
+After:   fader move → AudioComponent.volume (engine-side, no JS buffer walk)
+```
 
----
+`AudioLayerManager` discovers an `AudioComponent` on the same pad hierarchy as each `DynamicAudioOutput` (same object → child named `DynamicAudioOutput` → shallow search). When found:
 
-## What We’re Proud Of
-
-- **Cohesive DJ flow** on-device: genre → stems → pads → mix → expressive spectrum, without treating every feature as the same abstraction.
-- **Performance-aware BPM** and **crossfader** design: musicians notice when sliders “fight” the engine — debounce + explicit commit was the right split.
-- **Spectrum as a performance surface**: pinch navigation, optional theremin bed, and **shared** visual/audio metaphors (ring hue, pinch strength).
-- **Equalizer honesty**: the mesh reacts when **audio is really playing**, with an optional **material swap** so art direction stays crisp when idle.
-- **Maintainable scripts**: small focused components (`EqualizerVisualDriver`, `SpectrumThereminVoice`, `MiniMidiAudioSpectacleAdapter`) instead of one god object.
+- `addAudioFrame` receives unity-level PCM — no per-fader buffer multiply in JavaScript
+- Volume is applied by the Spectacles audio engine via `AudioComponent.volume`
+- Layers without a component log at startup and fall back to legacy PCM scale (so you always know which slots need wiring)
 
 ---
 
-## Pain Points & Gotchas
+#### 2 · Serialized Native Pumps
 
-- **Lens Studio wiring** — Many behaviors depend on **inspector references** (grid root, spectrum root, pinch navigator component, material assets). A missing reference often fails **silently** until you read logs; use the component hints in TypeScript `@hint` text as a checklist.
-- **Shader property names** — Custom graphs must expose a **Script/Dynamic** float compatible with names like `padPlaybackGate` (the driver tries several spellings). Mismatched names = static look even when logic runs.
-- **Spectrum vs pinch coordinates** — The ring layout is in the **pad / viz** hierarchy; pinch uses **`spectrumRoot`’s local XZ** in `SpectrumPinchNavigator`. If those spaces diverge, sector index and visuals can disagree until transforms are aligned.
-- **Lyria latency & quotas** — Cloud generation is inherently variable; the menu’s **Confirm** gate helps but does not remove network or quota issues.
-- **Material clones** — Swapping idle/animated materials is correct for visuals but **two** shader graphs must be authored consistently if both should respond to the same control names.
+```
+Before:  slide end → two full-buffer applies fire in the same tick → memory spike
+After:   queue → at most one interrupt + addAudioFrame per frame
+```
 
----
-
-## Requirements & Build
-
-- **Lens Studio** (project targets **Spectacles**; uses **Spectacles Interaction Kit** under `Assets/SpectaclesInteractionKit` and related packages).
-- **Internet** where Lyria / remote services are used (project settings must allow it for those code paths).
-- Open **`Assets/Scene.scene`** (or your active scene), ensure **Script Components** match the references described in each script’s `@input` hints.
+`applyLayerVolumeNow` no longer does heavy work synchronously when two decks update at once. Updates are queued; the manager drains at most one per frame so a fader release never stacks two buffer operations in a single tick.
 
 ---
 
-## Credits
+#### 3 · Debounced Slider Volume
 
-**3D design** — **[Forouzan Salsabili](https://github.com/forouzan1990)**  
-Portfolio: [forouzan.artstation.com](https://forouzan.artstation.com/) · GitHub: [@forouzan1990](https://github.com/forouzan1990)
+```
+Before:  every slider event → PCM work
+After:   debounced window + minimum delta threshold → redundant events skipped
+```
+
+`setLayerVolume` uses a longer debounce window with a minimum-delta guard. Tiny changes vs the last committed level are skipped entirely on the debounced path.
 
 ---
 
-*Last updated to reflect the current MiNiMIDI script set (BPM debounce, crossfader stability, stem menu flow, spectrum / theremin stack, equalizer dual-material driver, and spectrum ring layout improvements).*
+#### 4 · Hardened Crossfader Controller
+
+```
+Before:  assumed slider range 0–1 → wrong volumes on non-default SIK sliders
+After:   displayTo01() maps using slider's own min/max
+```
+
+`CrossfaderController` reads the SIK slider's actual `min`/`max`. During drag: time throttle + minimum delta + optional quantize steps cut the event rate. Deck layers are resolved with `AudioLayerManager.getLayerForOwner()` — volume always targets the right layer even if a pad's cached index is stale.
+
+---
+
+#### 5 · Lifecycle Hygiene
+
+```
+Before:  released layers could receive a delayed pump → ghost audio / corruption
+After:   immediate volume queue cleared on release, play, and replace
+```
+
+Immediate volume queues are cleared on `releaseLayer`, `playOnLayer`, and `replaceLayerPcmAndReplay`. Released or replaced layers cannot receive a delayed pump.
+
+---
+
+### 🎚️ Auto-Generated UI — No Manual Wiring
+
+v3 generates all pads and stem controls at runtime from a single config. No more assigning dozens of Inspector slots by hand.
+
+---
+
+### 🌈 Spectrum Visualizer
+
+A real-time per-stem frequency ring visualizes the mix as it happens — bar heights and colours shift with the audio energy of each active layer.
+
+---
+
+## 🚀 Features
+
+| Feature | Description |
+|---------|-------------|
+| 🎚️ **Live Crossfader** | Blend two AI decks — crash-safe on Spectacles |
+| 🎹 **Auto-Generated Pads** | All stems built at runtime, no Inspector wiring |
+| 🤖 **AI Stem Generation** | Unique loops via Google Lyria on demand |
+| 🌈 **Spectrum Visualizer** | Real-time frequency ring per active stem |
+| 🔊 **Native Gain Path** | Engine-side volume — zero PCM work in JS |
+| ⚡ **Serialized Pumps** | Max one buffer op per frame, no tick overruns |
+| 👐 **Hand-Controlled** | Mix entirely through Spectacles hand tracking |
+| 🔄 **Smart Layer Pool** | **9** pooled `DynamicAudioOutput` channels with lifecycle hygiene |
+
+---
+
+## 🎼 Genres
+
+| Genre | BPM | Vibe |
+|-------|-----|------|
+| 🎧 Electronic | 128 | Club, EDM, Synths |
+| 🎤 Hip Hop | 90 | Trap, 808s, Beats |
+| 🎷 Lo-fi Jazz | 75 | Chill, Relaxed, Smooth |
+| 🏠 House | 124 | Disco, Funky, Groovy |
+| 🎸 Rock | 120 | Guitar, Drums, Energy |
+
+---
+
+## 🛠️ Quick Start
+
+### Prerequisites
+
+- [Lens Studio 5.x](https://lensstudio.snapchat.com/download/)
+- [Snap Spectacles (2024)](https://www.spectacles.com/)
+- Google Cloud API access for Lyria (configure credentials per your Lens / backend setup — do not commit secrets)
+
+### Installation
+
+```bash
+git clone https://github.com/urbanpeppermint/MiniMIDI-v3.git
+cd MiniMIDI-v3
+# Open the .esproj file in Lens Studio
+```
+
+### Verify native gain path after deploy
+
+In Lens Studio / device logs, look for a line like:
+
+```text
+[AudioLayerManager] Ready 9/9 layers — **native gain** on all (crossfader does not rescale PCM)
+```
+
+Search for **`native gain on all`** if the exact count differs.
+
+If instead you see **`native gain on [ … ] only`** with **`PCM scale`**, add or wire an **`AudioComponent`** on those pad roots so the crossfader stays on the native gain path.
+
+### Project capabilities
+
+Enable **Internet Access** (and any other capabilities your Lyria integration requires) in **Project Settings** so generation and remote calls succeed on device.
+
+---
+
+## 🎮 How to Use
+
+| Step | Action |
+|------|--------|
+| 1️⃣ | **SELECT GENRE** — tap a genre button |
+| 2️⃣ | **WAIT FOR AI** — Lyria generates unique stems |
+| 3️⃣ | **TAP PADS** — toggle stems on / off |
+| 4️⃣ | **CROSSFADE** — grab the fader, blend two decks live |
+| 5️⃣ | **SWITCH GENRE** — cached stems load instantly |
+
+---
+
+## 🔬 Technical Depth
+
+### Why the old crossfader crashed
+
+```
+Deck A fader change:   read buffer → scale all samples in JS → pump DynamicAudioOutput
+Deck B fader change:   (same frame) → read buffer → scale → pump again
+                                                              ↑
+                                              script time overrun + memory spike = crash
+```
+
+Large AI stems are often **2–6+ MB** of raw PCM. Multiplying that twice in one TypeScript tick on Spectacles hardware is enough to blow the frame budget.
+
+### How v3 stays stable
+
+```typescript
+// Old path (dangerous on huge buffers)
+for (let i = 0; i < pcm.length; i += 2) {
+  let s = pcm[i] | (pcm[i+1] << 8);
+  if (s > 32767) s -= 65536;
+  s = Math.round(s * volume);           // full buffer × every fader event
+  s = Math.max(-32768, Math.min(32767, s));
+  out[i]   = s & 0xFF;
+  out[i+1] = (s >> 8) & 0xFF;
+}
+
+// New path (native gain — no buffer walk)
+audioComponent.volume = targetLevel;    // engine applies gain in hardware
+```
+
+### Layer lifecycle state machine
+
+```
+IDLE → playOnLayer()  → PLAYING
+PLAYING → releaseLayer() → IDLE         (queue cleared)
+PLAYING → replaceLayerPcmAndReplay() → PLAYING  (queue cleared, new PCM)
+PLAYING → fader event → enqueue → drain one per frame
+```
+
+---
+
+## 📊 Performance
+
+| Metric | Earlier Lyria builds | v3 |
+|--------|---------------------|-----|
+| Crossfade safety | ❌ crashes on large stems | ✅ stable |
+| Volume path | PCM multiply in JS | Engine-side gain (when `AudioComponent` present) |
+| Buffer ops per frame | Unbounded | Max 1 |
+| UI wiring | Manual per-pad | Auto-generated |
+| Visualizer | Dot pool | Spectrum ring |
+| Audio channels | — | **9** (pooled) |
+| Sample rate | 48 kHz | 48 kHz |
+
+---
+
+## 🏗️ Architecture
+
+```
+MiNiMIDI v3
+├── AudioLayerManager        Native gain discovery + serialized pump queue
+├── CrossfaderController       SIK slider → displayTo01() → getLayerForOwner()
+├── DJMidiManager              Lyria, pads, genre/BPM coordination
+├── MIDIControllerMenu         Genre + stem confirm flow
+├── MidiPadController          Per-pad PCM, playback, visuals
+├── SpectrumRingReaction       Ring layout + reaction
+├── SpectrumPinchNavigator     Pinch → sector / overlay
+├── SpectrumThereminVoice      Looped theremin bus (AudioComponent crossfade)
+└── MiniMidiAudioSpectacleAdapter   Spectrum ↔ pad audio port
+```
+
+---
+
+## 🔗 Built On
+
+<p align="center">
+  <a href="https://github.com/urbanpeppermint/MiNiMIDI_LYRIA">
+    <img src="https://img.shields.io/badge/MiNiMIDI_LYRIA-Previous_Version-9B59B6?style=for-the-badge&logo=github" alt="MiNiMIDI LYRIA">
+  </a>
+</p>
+
+v3 is a ground-up rewrite of the **audio engine** from MiNiMIDI LYRIA, retaining the Lyria AI integration and genre system while replacing the unsafe PCM crossfader with native gain control, serialized pumps, and hardened SIK handling.
+
+---
+
+## 📄 License
+
+MIT License — see [LICENSE](LICENSE)
+
+---
+
+<p align="center">
+  <strong>Built with 💜 for Snap Spectacles</strong>
+  <br><br>
+  <sub>by <a href="https://github.com/urbanpeppermint">@urbanpeppermint</a></sub>
+</p>
