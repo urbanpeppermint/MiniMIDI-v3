@@ -23,7 +23,7 @@
   </a>
 </p>
 
-*Replace `YOUR_DEMO_LINK_HERE` with your YouTube or hosted reel when ready.*
+*https://www.reddit.com/r/Spectacles/s/fmYjZjFbZg*
 
 ---
 
