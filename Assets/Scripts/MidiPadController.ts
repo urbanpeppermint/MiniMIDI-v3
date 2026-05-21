@@ -103,6 +103,8 @@ export class MidiPadController extends BaseScriptComponent {
     private _ownerId: string = "";
     private _layerIndex: number = -1;
     private _interactable: Interactable | null = null;
+    /** Invalidates pending stem-loop timers (incremented on cancel / stop / PCM refresh). */
+    private _stemLoopToken: number = 0;
     
     // Base64 lookup table
     private static readonly BASE64_CHARS: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -195,6 +197,8 @@ export class MidiPadController extends BaseScriptComponent {
             this.rebuildPlaybackPcmFromSource();
             this._playbackPcmDirty = false;
         }
+
+        this.cancelStemLoopSchedule();
         
         this._state = PadState.Playing;
         this._isPlaying = true;
@@ -206,12 +210,71 @@ export class MidiPadController extends BaseScriptComponent {
         manager.playOnLayer(this._layerIndex, this._audioData);
         
         print(`[Pad ${this.padIndex}] ${this._instrumentEmoji} ${this._instrumentName} ▶ PLAYING on layer ${this._layerIndex}`);
+
+        this.scheduleStemLoopReplay();
+    }
+
+    private cancelStemLoopSchedule(): void {
+        this._stemLoopToken++;
+    }
+
+    private getPlaybackDurationSec(): number {
+        if (!this._audioData || this._audioData.length < 4) {
+            return 1.0;
+        }
+        const frames = this._audioData.length / 4;
+        return Math.max(0.25, frames / 48000);
+    }
+
+    /**
+     * Re-queue `playOnLayer` when the clip ends so stems loop until the user taps stop.
+     * Timing is derived from current PCM length @ 48 kHz stereo.
+     */
+    private scheduleStemLoopReplay(): void {
+        if (!this._isPlaying || this._state !== PadState.Playing) {
+            return;
+        }
+        if (!this._audioData || this._layerIndex < 0) {
+            return;
+        }
+        const armed = this._stemLoopToken;
+        const delay = this.getPlaybackDurationSec() * 0.998;
+        const ev = this.createEvent("DelayedCallbackEvent") as DelayedCallbackEvent;
+        ev.bind(() => {
+            if (armed !== this._stemLoopToken) {
+                return;
+            }
+            if (!this._isPlaying || this._state !== PadState.Playing) {
+                return;
+            }
+            const m = AudioLayerManager.getInstance();
+            if (!m || this._layerIndex < 0 || !this._audioData) {
+                return;
+            }
+            if (this._sourcePcm && this._playbackPcmDirty) {
+                this.rebuildPlaybackPcmFromSource();
+                this._playbackPcmDirty = false;
+            }
+            m.playOnLayer(this._layerIndex, this._audioData);
+            this.scheduleStemLoopReplay();
+        });
+        ev.reset(delay);
+    }
+
+    private refreshStemLoopAfterPcmChange(): void {
+        if (!this._isPlaying || this._state !== PadState.Playing || this._layerIndex < 0) {
+            return;
+        }
+        this.cancelStemLoopSchedule();
+        this.scheduleStemLoopReplay();
     }
     
     /**
      * Stop the pad - release layer
      */
     public stop(): void {
+        this.cancelStemLoopSchedule();
+
         const manager = AudioLayerManager.getInstance();
         
         if (manager && this._layerIndex >= 0) {
@@ -239,6 +302,8 @@ export class MidiPadController extends BaseScriptComponent {
      * Force release layer (called when switching genres)
      */
     public releaseLayer(): void {
+        this.cancelStemLoopSchedule();
+
         const manager = AudioLayerManager.getInstance();
         
         if (manager && this._layerIndex >= 0) {
@@ -459,6 +524,7 @@ export class MidiPadController extends BaseScriptComponent {
             const manager = AudioLayerManager.getInstance();
             if (this._layerIndex >= 0 && manager && this._audioData) {
                 manager.replaceLayerPcmAndReplay(this._layerIndex, this._audioData);
+                this.refreshStemLoopAfterPcmChange();
             }
         } else {
             this._playbackPcmDirty = true;
@@ -504,6 +570,7 @@ export class MidiPadController extends BaseScriptComponent {
         const manager = AudioLayerManager.getInstance();
         if (this._isPlaying && this._layerIndex >= 0 && manager && this._audioData) {
             manager.replaceLayerPcmAndReplay(this._layerIndex, this._audioData);
+            this.refreshStemLoopAfterPcmChange();
         }
     }
     

@@ -7,6 +7,13 @@
  * or crash the device. When an {@link AudioComponent} is found on the same pad hierarchy as the
  * DynamicAudioOutput script, we drive level with `AudioComponent.volume` (native) and send
  * **unity** PCM to `addAudioFrame`. Otherwise we fall back to JS `_applyVolume` (expensive).
+ *
+ * **Snap / Spectacles recording:** Spatial `volume` and `recordingVolume` can differ; we set both
+ * so crossfader levels match what is baked into Snaps.
+ *
+ * **Defensive init:** Each `_layerN` input must reference a script with `initialize(48000)`. Failed
+ * slots are marked unusable so `acquireLayer` never assigns them (avoids crashes when one Inspector
+ * reference is wrong or a component is not DynamicAudioOutput).
  */
 
 const AUDIO_COMPONENT_TYPE = "Component.AudioComponent";
@@ -39,6 +46,8 @@ export class AudioLayerManager extends BaseScriptComponent {
     private _layerAudioData: (Uint8Array | null)[] = [];
     /** When set, layer volume is applied via AudioComponent.volume (no full-buffer rescale). */
     private _layerOutputAudio: (AudioComponent | null)[] = [];
+    /** False until `initialize(48000)` succeeds for that slot — failed slots are never acquired. */
+    private _layerInitOk: boolean[] = [];
     private _initialized: boolean = false;
     
     // Debounce control for volume changes
@@ -95,6 +104,7 @@ export class AudioLayerManager extends BaseScriptComponent {
         this._layerVolumes = new Array(this.LAYER_COUNT).fill(1.0);
         this._layerAudioData = new Array(this.LAYER_COUNT).fill(null);
         this._layerOutputAudio = new Array(this.LAYER_COUNT).fill(null);
+        this._layerInitOk = new Array(this.LAYER_COUNT).fill(false);
         this._pendingVolumeUpdate = new Array(this.LAYER_COUNT).fill(false);
         this._volumeUpdateTimer = new Array(this.LAYER_COUNT).fill(0);
         this._lastVolumePushedToLayer = new Array(this.LAYER_COUNT).fill(-1);
@@ -102,21 +112,44 @@ export class AudioLayerManager extends BaseScriptComponent {
         // Initialize each DynamicAudioOutput at 48kHz
         let validCount = 0;
         const gainLayerIndices: number[] = [];
+        const unhealthyIndices: number[] = [];
         for (let i = 0; i < this._layers.length; i++) {
-            if (this._layers[i]) {
-                try {
-                    this._layers[i].initialize(48000);
-                    validCount++;
-                    this._layerOutputAudio[i] = this.findLayerOutputAudioComponent(this._layers[i]);
-                    if (this._layerOutputAudio[i]) {
-                        gainLayerIndices.push(i);
-                    }
-                } catch (e) {
-                    print(`[AudioLayerManager] Layer ${i} init error: ${e}`);
-                }
-            } else {
-                print(`[AudioLayerManager] Layer ${i} is null`);
+            this._layerInitOk[i] = false;
+            this._layerOutputAudio[i] = null;
+            const layerScript = this._layers[i];
+            if (!layerScript) {
+                print(`[AudioLayerManager] Layer ${i} input is null — assign DynamicAudioOutput ScriptComponent in inspector`);
+                unhealthyIndices.push(i);
+                continue;
             }
+            if (typeof (layerScript as any).initialize !== "function") {
+                print(
+                    `[AudioLayerManager] Layer ${i} is not a DynamicAudioOutput (no initialize()) — check AudioLayerManager _layer${i} reference`
+                );
+                unhealthyIndices.push(i);
+                continue;
+            }
+            try {
+                (layerScript as any).initialize(48000);
+                this._layerInitOk[i] = true;
+                validCount++;
+                this._layerOutputAudio[i] = this.findLayerOutputAudioComponent(layerScript);
+                if (this._layerOutputAudio[i]) {
+                    gainLayerIndices.push(i);
+                }
+            } catch (e) {
+                this._layerInitOk[i] = false;
+                this._layerOutputAudio[i] = null;
+                print(`[AudioLayerManager] Layer ${i} init error: ${e}`);
+                unhealthyIndices.push(i);
+            }
+        }
+        if (unhealthyIndices.length > 0) {
+            print(
+                `[AudioLayerManager] **Unhealthy layer slot(s):** [${unhealthyIndices.join(
+                    ", "
+                )}] — not used for playback until fixed in Lens Studio (wrong object or broken DynamicAudioOutput)`
+            );
         }
         if (gainLayerIndices.length === validCount && validCount > 0) {
             print(
@@ -131,6 +164,14 @@ export class AudioLayerManager extends BaseScriptComponent {
         }
         
         this._initialized = true;
+    }
+
+    /** True if this pool index initialized successfully and may be acquired for playback. */
+    private isLayerHardwareUsable(index: number): boolean {
+        if (index < 0 || index >= this.LAYER_COUNT) {
+            return false;
+        }
+        return this._layerInitOk[index] === true && this._layers[index] != null;
     }
     
     private updateDebounceTimers(): void {
@@ -147,7 +188,7 @@ export class AudioLayerManager extends BaseScriptComponent {
             if (item.index < 0 || item.index >= this.LAYER_COUNT) {
                 continue;
             }
-            if (!this._layerInUse[item.index] || !this._layerAudioData[item.index]) {
+            if (!this.isLayerHardwareUsable(item.index) || !this._layerInUse[item.index] || !this._layerAudioData[item.index]) {
                 continue;
             }
             const v = Math.max(0, Math.min(1, item.volume));
@@ -160,7 +201,11 @@ export class AudioLayerManager extends BaseScriptComponent {
         }
 
         for (let i = 0; i < this.LAYER_COUNT; i++) {
-            if (this._pendingVolumeUpdate[i] && this._volumeUpdateTimer[i] <= 0) {
+            if (
+                this._pendingVolumeUpdate[i] &&
+                this._volumeUpdateTimer[i] <= 0 &&
+                this.isLayerHardwareUsable(i)
+            ) {
                 this._pendingVolumeUpdate[i] = false;
                 this._applyVolumeToLayer(i, true);
                 return;
@@ -209,9 +254,9 @@ export class AudioLayerManager extends BaseScriptComponent {
             }
         }
         
-        // Find first available layer
+        // Find first available layer (skip slots that failed DynamicAudioOutput init)
         for (let i = 0; i < this._layerInUse.length; i++) {
-            if (!this._layerInUse[i] && this._layers[i]) {
+            if (!this._layerInUse[i] && this.isLayerHardwareUsable(i)) {
                 this._layerInUse[i] = true;
                 this._layerOwner[i] = ownerId;
                 this._layerVolumes[i] = 1.0;
@@ -221,7 +266,9 @@ export class AudioLayerManager extends BaseScriptComponent {
             }
         }
         
-        print(`[AudioLayerManager] No available layers! (${this.getActiveLayerCount()}/${this.LAYER_COUNT} in use)`);
+        print(
+            `[AudioLayerManager] No available layers! (${this.getActiveLayerCount()}/${this.LAYER_COUNT} in use, ${this.getHealthyLayerCount()} healthy init slots)`
+        );
         this.logLayerStatus();
         return -1;
     }
@@ -300,11 +347,22 @@ export class AudioLayerManager extends BaseScriptComponent {
         return null;
     }
 
-    private resetLayerHardwareVolume(index: number): void {
+    /** Drive native gain for spatial output and for Snap recording (same value). */
+    private setLayerHardwareGain(index: number, linear01: number): void {
         const ac = this._layerOutputAudio[index];
-        if (ac) {
-            ac.volume = 1.0;
+        if (!ac) {
+            return;
         }
+        const v = Math.max(0, Math.min(1, linear01));
+        if (!isFinite(v)) {
+            return;
+        }
+        ac.volume = v;
+        (ac as any).recordingVolume = v;
+    }
+
+    private resetLayerHardwareVolume(index: number): void {
+        this.setLayerHardwareGain(index, 1.0);
     }
 
     private usesHardwareLayerGain(index: number): boolean {
@@ -350,6 +408,10 @@ export class AudioLayerManager extends BaseScriptComponent {
             print(`[AudioLayerManager] Invalid layer index: ${index}`);
             return;
         }
+        if (!this.isLayerHardwareUsable(index)) {
+            print(`[AudioLayerManager] playOnLayer(${index}) skipped — layer did not init (fix inspector reference)`);
+            return;
+        }
         
         const layer = this._layers[index];
         if (!layer) {
@@ -379,11 +441,8 @@ export class AudioLayerManager extends BaseScriptComponent {
             // Play new audio
             layer.addAudioFrame(adjustedAudio, 2); // 2 = stereo
 
-            if (useHwGain && this._layerOutputAudio[index]) {
-                this._layerOutputAudio[index].volume = Math.max(
-                    0,
-                    Math.min(1, this._layerVolumes[index])
-                );
+            if (useHwGain) {
+                this.setLayerHardwareGain(index, this._layerVolumes[index]);
             }
             
             const owner = this._layerOwner[index] || "unknown";
@@ -400,6 +459,9 @@ export class AudioLayerManager extends BaseScriptComponent {
      */
     public replaceLayerPcmAndReplay(index: number, audioData: Uint8Array): void {
         if (index < 0 || index >= this.LAYER_COUNT) {
+            return;
+        }
+        if (!this.isLayerHardwareUsable(index)) {
             return;
         }
         if (!this._layerInUse[index]) {
@@ -427,11 +489,8 @@ export class AudioLayerManager extends BaseScriptComponent {
                 layer.initialize(48000);
             }
             layer.addAudioFrame(adjustedAudio, 2);
-            if (useHwGain && this._layerOutputAudio[index]) {
-                this._layerOutputAudio[index].volume = Math.max(
-                    0,
-                    Math.min(1, this._layerVolumes[index])
-                );
+            if (useHwGain) {
+                this.setLayerHardwareGain(index, this._layerVolumes[index]);
             }
             this._lastVolumePushedToLayer[index] = this._layerVolumes[index];
         } catch (e) {
@@ -444,6 +503,7 @@ export class AudioLayerManager extends BaseScriptComponent {
      */
     public stopLayer(index: number): void {
         if (index < 0 || index >= this.LAYER_COUNT) return;
+        if (!this.isLayerHardwareUsable(index)) return;
         
         const layer = this._layers[index];
         if (!layer) return;
@@ -465,15 +525,17 @@ export class AudioLayerManager extends BaseScriptComponent {
      */
     public stopAll(): void {
         for (let i = 0; i < this.LAYER_COUNT; i++) {
-            if (this._layers[i]) {
-                try {
-                    if (typeof this._layers[i].interruptAudioOutput === 'function') {
-                        this._layers[i].interruptAudioOutput();
-                    } else {
-                        this._layers[i].initialize(48000);
-                    }
-                } catch (e) {}
+            if (!this.isLayerHardwareUsable(i)) {
+                continue;
             }
+            const layer = this._layers[i];
+            try {
+                if (typeof layer.interruptAudioOutput === 'function') {
+                    layer.interruptAudioOutput();
+                } else {
+                    layer.initialize(48000);
+                }
+            } catch (e) {}
         }
         print(`[AudioLayerManager] Stopped all layers`);
     }
@@ -487,6 +549,7 @@ export class AudioLayerManager extends BaseScriptComponent {
      */
     public setLayerVolume(index: number, volume: number): void {
         if (index < 0 || index >= this.LAYER_COUNT) return;
+        if (!this.isLayerHardwareUsable(index)) return;
         
         const clampedVolume = Math.max(0, Math.min(1, volume));
         this._layerVolumes[index] = clampedVolume;
@@ -503,6 +566,7 @@ export class AudioLayerManager extends BaseScriptComponent {
      */
     public applyLayerVolumeNow(index: number, volume: number): void {
         if (index < 0 || index >= this.LAYER_COUNT) return;
+        if (!this.isLayerHardwareUsable(index)) return;
 
         const clampedVolume = Math.max(0, Math.min(1, volume));
         this._layerVolumes[index] = clampedVolume;
@@ -526,6 +590,9 @@ export class AudioLayerManager extends BaseScriptComponent {
      * Apply pending volume change to layer (called after debounce)
      */
     private _applyVolumeToLayer(index: number, skipIfTinyChange: boolean): void {
+        if (!this.isLayerHardwareUsable(index)) {
+            return;
+        }
         const audioData = this._layerAudioData[index];
         const layer = this._layers[index];
         
@@ -542,7 +609,7 @@ export class AudioLayerManager extends BaseScriptComponent {
 
         const ac = this._layerOutputAudio[index];
         if (ac) {
-            ac.volume = Math.max(0, Math.min(1, vol));
+            this.setLayerHardwareGain(index, vol);
             this._lastVolumePushedToLayer[index] = vol;
             return;
         }
@@ -624,7 +691,24 @@ export class AudioLayerManager extends BaseScriptComponent {
     }
     
     public getAvailableLayerCount(): number {
-        return this._layerInUse.filter(inUse => !inUse).length;
+        let n = 0;
+        for (let i = 0; i < this.LAYER_COUNT; i++) {
+            if (!this._layerInUse[i] && this.isLayerHardwareUsable(i)) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** Slots where `initialize(48000)` succeeded — use with `getAvailableLayerCount()` for UI. */
+    public getHealthyLayerCount(): number {
+        let n = 0;
+        for (let i = 0; i < this.LAYER_COUNT; i++) {
+            if (this._layerInitOk[i]) {
+                n++;
+            }
+        }
+        return n;
     }
     
     public getTotalLayerCount(): number {
@@ -642,11 +726,14 @@ export class AudioLayerManager extends BaseScriptComponent {
     public logLayerStatus(): void {
         print(`[AudioLayerManager] ═══ Layer Status ═══`);
         for (let i = 0; i < this.LAYER_COUNT; i++) {
+            const hw = this._layerInitOk[i] ? "OK" : "BROKEN";
             const status = this._layerInUse[i] ? "IN USE" : "FREE";
             const owner = this._layerOwner[i] || "-";
             const volume = Math.round(this._layerVolumes[i] * 100);
-            print(`  Layer ${i}: ${status} | Owner: ${owner} | Vol: ${volume}%`);
+            print(`  Layer ${i}: ${hw} | ${status} | Owner: ${owner} | Vol: ${volume}%`);
         }
-        print(`[AudioLayerManager] Total: ${this.getActiveLayerCount()}/${this.LAYER_COUNT} in use`);
+        print(
+            `[AudioLayerManager] Total: ${this.getActiveLayerCount()}/${this.LAYER_COUNT} in use | Healthy init: ${this.getHealthyLayerCount()}/${this.LAYER_COUNT}`
+        );
     }
 }

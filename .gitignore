@@ -1,11 +1,3 @@
-# MiNiMIDI v3 — never commit (local agents, external AETHER tree, caches)
-.agents/
-agents/
-AETHER_HANDS/
-**/AETHER_HANDS/
-.cache/
-**/.cache/
-
 # Shipped by Lens Studio
 
 # The lines below are automatically generated and updated by Lens Studio.
@@ -24,3 +16,11 @@ Workspaces/**
 *.lock
 
 # Shipped by Lens Studio
+# MiNiMIDI v3 — never commit (local agents, external AETHER tree, caches)
+.agents/
+agents/
+AETHER_HANDS/
+**/AETHER_HANDS/
+.cache/
+**/.cache/
+

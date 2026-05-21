@@ -59,8 +59,8 @@ export class DJMidiManager extends BaseScriptComponent {
     bpmTweakAtMax: number = 6;
     
     @input
-    @hint("Debounce (seconds) while dragging BPM tweak slider — label updates immediately; heavy resample runs after you pause or on slide end.")
-    bpmTweakDebounceSec: number = 0.18;
+    @hint("Debounce (seconds) while dragging BPM tweak slider — label updates immediately; heavy resample runs after you pause or on slide end. Lower = snappier on Spectacles (more CPU).")
+    bpmTweakDebounceSec: number = 0.09;
     
     @input
     @hint("Optional: parent for SIK Slider — linear tempo on already-generated clips (pitch follows). Center = 1.0×.")
@@ -242,11 +242,36 @@ export class DJMidiManager extends BaseScriptComponent {
         pads.sort((a, b) => a.getPadIndex() - b.getPadIndex());
         return pads;
     }
+
+    /** Resolve physical pad by its inspector `padIndex` (0–8), not array position. */
+    private findPadWithIndex(pads: MidiPadController[], padSlot: number): MidiPadController | null {
+        const slot = Math.floor(padSlot);
+        for (let i = 0; i < pads.length; i++) {
+            if (Math.floor(pads[i].getPadIndex()) === slot) {
+                return pads[i];
+            }
+        }
+        return null;
+    }
     
     private configurePadsForGenre(pads: MidiPadController[], genre: GenreConfig): void {
-        for (let i = 0; i < pads.length && i < genre.instruments.length; i++) {
-            const inst = genre.instruments[i];
-            pads[i].configure(inst.id, inst.name, inst.emoji);
+        const instList = genre.instruments;
+        for (let i = 0; i < pads.length; i++) {
+            const pad = pads[i];
+            const slot = Math.max(0, Math.min(instList.length - 1, Math.floor(pad.getPadIndex())));
+            const inst = instList[slot];
+            pad.configure(inst.id, inst.name, inst.emoji);
+        }
+        const seen = new Set<number>();
+        for (let i = 0; i < pads.length; i++) {
+            seen.add(Math.floor(pads[i].getPadIndex()));
+        }
+        for (let slot = 0; slot < 9; slot++) {
+            if (!seen.has(slot)) {
+                print(
+                    `[DJMidiManager] WARNING: No MidiPadController in grid with padIndex ${slot} — labels and stems will not line up until the scene has 9 pads (indices 0–8).`
+                );
+            }
         }
     }
     
@@ -305,7 +330,7 @@ export class DJMidiManager extends BaseScriptComponent {
         const scheduleBpmStemResampleDebounced = () => {
             this._bpmStemResampleToken++;
             const token = this._bpmStemResampleToken;
-            const debounce = Math.max(0.08, this.bpmTweakDebounceSec);
+            const debounce = Math.max(0.04, Math.min(0.22, this.bpmTweakDebounceSec));
             const ev = this.createEvent("DelayedCallbackEvent") as DelayedCallbackEvent;
             ev.bind(() => {
                 if (token !== this._bpmStemResampleToken) {
@@ -369,8 +394,7 @@ export class DJMidiManager extends BaseScriptComponent {
         if (pads.length === 0) {
             return;
         }
-        const idx = Math.max(0, Math.min(pads.length - 1, Math.floor(this._bpmEditPadIndex)));
-        const target = pads[idx];
+        const target = this.findPadWithIndex(pads, Math.floor(this._bpmEditPadIndex));
         if (!target) {
             return;
         }
@@ -387,7 +411,7 @@ export class DJMidiManager extends BaseScriptComponent {
             const lockedBpm = target.getStemEffectiveBpm();
             const stemTag =
                 lockedBpm !== null
-                    ? ` | stem ${idx} (${target.getInstrumentName()}) locked ${lockedBpm} BPM`
+                    ? ` | stem ${target.getPadIndex()} (${target.getInstrumentName()}) locked ${lockedBpm} BPM`
                     : "";
             print(
                 `[DJMidiManager] BPM tweak (commit): display=${disp.toFixed(3)} → t=${t.toFixed(3)} offset=${this._bpmOffset.toFixed(1)} BPM (Lyria ${eff} BPM)${stemTag} | heard ${heard.toFixed(3)}×`
@@ -592,13 +616,12 @@ export class DJMidiManager extends BaseScriptComponent {
         const base = genre.bpm;
         const delta = Math.round(eff - base);
         const pads = this.padsByGenre[this.currentMode] || [];
-        const ei = Math.max(0, Math.min(pads.length - 1, Math.floor(this._bpmEditPadIndex)));
-        const ep = pads[ei];
+        const ep = this.findPadWithIndex(pads, Math.floor(this._bpmEditPadIndex));
         const locked = ep ? ep.getStemEffectiveBpm() : null;
         const slot =
             ep && (ep.getInstrumentName() || "").trim().length > 0
                 ? ep.getInstrumentName()
-                : `Stem ${ei + 1}`;
+                : `Stem ${Math.floor(this._bpmEditPadIndex) + 1}`;
         if (locked !== null) {
             const ld = Math.round(locked - base);
             const sgn = ld > 0 ? "+" : "";
@@ -691,7 +714,9 @@ export class DJMidiManager extends BaseScriptComponent {
         // Log available layers
         const manager = AudioLayerManager.getInstance();
         if (manager) {
-            print(`[DJMidiManager] Available layers: ${manager.getAvailableLayerCount()}/${manager.getTotalLayerCount()}`);
+            print(
+                `[DJMidiManager] Available layers: ${manager.getAvailableLayerCount()}/${manager.getHealthyLayerCount()} (free / init-ok slots)`
+            );
         }
         
         // ═══════════════════════════════════════════════════════════
@@ -781,7 +806,9 @@ export class DJMidiManager extends BaseScriptComponent {
         const manager = AudioLayerManager.getInstance();
         if (manager) {
             manager.releaseAllLayers();
-            print(`[DJMidiManager] All layers released. Available: ${manager.getAvailableLayerCount()}`);
+            print(
+                `[DJMidiManager] All layers released. Available: ${manager.getAvailableLayerCount()}/${manager.getHealthyLayerCount()}`
+            );
         }
         
         // Unregister all from crossfader - use individual unregister calls
@@ -889,20 +916,28 @@ export class DJMidiManager extends BaseScriptComponent {
         this.isGenerating[mode] = true;
         this.updateStatus(`Generating ${genre.name} (${indices.length} stem(s))...`);
 
-        for (let i = 0; i < pads.length && i < 9; i++) {
-            if (fullMask[i]) {
-                pads[i].setLoading();
+        for (let slot = 0; slot < 9; slot++) {
+            const p = this.findPadWithIndex(pads, slot);
+            if (!p) {
+                continue;
+            }
+            if (fullMask[slot]) {
+                p.setLoading();
             } else {
-                pads[i].reset();
+                p.reset();
             }
         }
 
         this.generateTracksSequentiallyMasked(genre, pads, mode, indices, 0, () => {
             this.isGenerating[mode] = false;
             this.generatedGenres[mode] = true;
-            for (let i = 0; i < pads.length && i < 9; i++) {
-                if (!fullMask[i]) {
-                    pads[i].reset();
+            for (let slot = 0; slot < 9; slot++) {
+                if (fullMask[slot]) {
+                    continue;
+                }
+                const p = this.findPadWithIndex(pads, slot);
+                if (p) {
+                    p.reset();
                 }
             }
             const syncEv = this.createEvent("DelayedCallbackEvent") as DelayedCallbackEvent;
@@ -935,12 +970,23 @@ export class DJMidiManager extends BaseScriptComponent {
         }
 
         const index = indices[cursor];
-        if (index < 0 || index >= pads.length || index >= genre.instruments.length) {
+        if (index < 0 || index >= genre.instruments.length) {
             this.scheduleNextMasked(genre, pads, mode, indices, cursor, onComplete);
             return;
         }
 
-        const pad = pads[index];
+        const pad = this.findPadWithIndex(pads, index);
+        if (!pad) {
+            const instName = genre.instruments[index]?.name ?? `slot ${index + 1}`;
+            this.updateStatus(
+                `⚠ ${genre.name}: Pad ${index + 1} (${instName}) — no pad in scene; cannot generate.`
+            );
+            print(
+                `[DJMidiManager] ERROR: No pad with padIndex ${index} in grid — cannot generate ${instName}. Add MidiPadController with padIndex ${index} under midiPadGrid.`
+            );
+            this.scheduleNextMasked(genre, pads, mode, indices, cursor, onComplete);
+            return;
+        }
         const inst = genre.instruments[index];
 
         this.updateStatus(
@@ -990,16 +1036,26 @@ export class DJMidiManager extends BaseScriptComponent {
                         }
                     } else {
                         pad.setError();
-                        print(`[DJMidiManager] ✗ No audio for: ${inst.name}`);
+                        this.updateStatus(
+                            `⚠ ${genre.name}: Pad ${index + 1} ${inst.emoji} ${inst.name} — Lyria returned no audio bytes (generation issue).`
+                        );
+                        print(`[DJMidiManager] ✗ No audio for: ${inst.name} (pad ${index + 1})`);
                     }
                 } else {
                     pad.setError();
-                    print(`[DJMidiManager] ✗ Empty response for: ${inst.name}`);
+                    this.updateStatus(
+                        `⚠ ${genre.name}: Pad ${index + 1} ${inst.emoji} ${inst.name} — empty Lyria response (generation issue).`
+                    );
+                    print(`[DJMidiManager] ✗ Empty response for: ${inst.name} (pad ${index + 1})`);
                 }
 
                 this.scheduleNextMasked(genre, pads, mode, indices, cursor, onComplete);
             })
             .catch((error) => {
+                const detail = String(error).replace(/\s+/g, " ").substring(0, 140);
+                this.updateStatus(
+                    `⚠ ${genre.name}: Pad ${index + 1} ${inst.emoji} ${inst.name} — generation failed: ${detail}`
+                );
                 print(`[DJMidiManager] ✗ Error generating ${inst.name}: ${error}`);
                 pad.setError();
                 this.scheduleNextMasked(genre, pads, mode, indices, cursor, onComplete);
